@@ -67,7 +67,7 @@ Transfer function is a function that describe relationship between input and out
 
 *Single input -- Single output system*
 
-Given a single input-single output,we have state space representation as:
+Given a linear single input-single output system,we have state space representation as:
 $
 cases(
   bold(accent(x,dot)) &= bold(A)bold(x) + bold(B) u,
@@ -125,3 +125,30 @@ g(s) = (bold(C) "adj"(s bold(I) - bold(A)) bold(B))/(det(s bold(I) - bold(A)))
 $
 
 *Multi input -- Multi output system*
+
+Given a multi input-multi output system,we define transfer function between i-th out $y_i$ and j-th input $u_j$ as:
+$
+g_(i j)(s) = (Y_i (s))/(U_j (s))
+$
+where $Y_i (s)$ is Laplace transform of $y_i (t)$ and $U_j (s)$ is Laplace transform of $u_j (t)$.
+Must mention that if we define transfer function in this way,we assume that all other inputs are zero.Because linear system satisfies the principle of superposition,so when we plus all inputs $U_1,U_2,dots,U_p$,we can get the i-th output $Y_i$ as:
+$
+Y_i = sum_(j=1)^p g_(i j) U_j
+$
+We can write it as matrix form:
+$
+bold(Y)(s) = bold(G)(s) bold(U)(s)
+$
+
+Thus given a linear multi input-multi output system,we have state space representation as:
+$
+cases(
+  bold(accent(x,dot)) &= bold(A)bold(x) + bold(B)bold(u),
+  bold(y) &= bold(C)bold(x) + bold(D)bold(u)
+)
+$
+We can conduct as before to get transfer function as:
+$
+bold(G)(s) = bold(C)(s bold(I) - bold(A))^(-1) bold(B) + bold(D) = (bold(C) "adj"(s bold(I) - bold(A)) bold(B) + bold(D) "det"(s bold(I) - bold(A)))/(det(s bold(I) - bold(A)))
+$
+
