@@ -5,6 +5,7 @@
 #show math.equation: i-figured.show-equation.with(level: 2)
 #show heading: i-figured.reset-counters.with(level: 2)
 
+#counter(heading).update(1)
 = Description of State Space
 == Definition
 1. *Input variables*
@@ -151,4 +152,113 @@ We can conduct as before to get transfer function as:
 $
 bold(G)(s) = bold(C)(s bold(I) - bold(A))^(-1) bold(B) + bold(D) = (bold(C) "adj"(s bold(I) - bold(A)) bold(B) + bold(D) "det"(s bold(I) - bold(A)))/(det(s bold(I) - bold(A)))
 $
+
+== Establishing State Space Model by Differential Equation
+
+Given a single input and single output system,if we have differential equation as:
+$
+y^((n)) + a_1 y^((n-1)) + a_2 y^((n-2)) + dots + a_n y = b_0 u + b_1 u^((1)) + b_2 u^((2)) + dots + b_m u^((m))
+$<differential_equation>
+where $m<=n$.
+
+*Condition 1: $m = 0$*
+let $b_0 = 1$,we have:
+$
+y^((n)) + a_1 y^((n-1)) + a_2 y^((n-2)) + dots + a_n y = b_0 u + b_1 u^((1)) + b_2 u^((2)) + dots + b_m u^((m))
+$
+We can define state variables as:
+$
+cases(
+  x_1 &= y,
+  x_2 &= y^((1)),
+  x_3 &= y^((2)),
+  &dots.v,
+  x_n &= y^((n-1))
+)
+$
+We can get state equation as:
+$
+cases(
+  accent(x,dot)_1 = x_2,
+  accent(x,dot)_2 = x_3,
+  dots.v,
+  accent(x,dot)_(n-1) = x_n,
+  accent(x,dot)_n = -a_1 x_n - a_2 x_(n-1) - dots - a_n x_1 + b_0 u
+)
+$
+We can rewrite it as vector form:
+$
+bold(accent(x,dot)) = mat(delim: "[",
+0,1,dots,0;
+dots.v,dots.v,dots.down,dots.v;
+0,0,dots,1;
+-a_n,-a_(n-1),dots,-a_1
+) bold(x) + mat(delim: "[",0;0;dots.v;1) \
+y = mat(delim: "[",1,0,dots,0) bold(x)
+  
+$
+
+*Condition 2:*$m eq.not n$
+
+*Controllable Canonical Form Method:*
+
+Let us note D as $dv(,t)$,we can rewrite @eqt:differential_equation as:
+$
+y = (b_0 D^m + b_1 D^(m-1) + b_2 D^(m-2) + dots + b_m)/(D^n + a_1 D^(n-1) + a_2 D^(n-2) + dots +a_n) u
+$<differential_equation_divide>
+Let us discuss the case when $m<n$
+
+let $accent(y,tilde)^((n)) + a_1 accent(y,tilde)^((n-1)) + a_2 accent(y,tilde)^((n-2)) + dots + a_(n-1) accent(y,tilde)^((1)) + a_n accent(y,tilde) = u$ also as $accent(y,tilde) =1/(D^n + a_1 D^(n-1) + a_2 D^(n-2) + dots +a_n) u$
+
+we can get:
+$
+y = b_0 accent(y,tilde)^((m)) + b_1 accent(y,tilde)^((m-1)) + b_2 accent(y,tilde)^((m-2)) + dots + b_m accent(y,tilde)
+$
+We choose state variables as $x_1 = accent(y,tilde),x_2 = accent(y,tilde)^((1)) ,dots,x_n = accent(y,tilde)^((n-1)) $.We can get state equation as:
+$
+cases(
+  accent(x,dot)_1 = x_2,
+  accent(x,dot)_2 = x_3,
+  dots.v,
+  accent(x,dot)_(n-1) = x_n,
+  accent(x,dot)_n = -a_n x_1 - a_(n-1) x_2 - dots - a_1 x_n + u
+)
+$
+and output equation as:
+$
+y = b_m x_1 + b_(m-1) x_2 + dots + b_0 x_(m+1)
+$
+We can rewrite it as vector form:
+$
+bold(accent(x,dot)) = mat(delim: "[",
+0,1,dots,0;
+dots.v,dots.v,dots.down,dots.v;
+0,0,dots,1;
+-a_n,-a_(n-1),dots,-a_1
+) bold(x) + mat(delim: "[",0;0;dots.v;1)u \
+y = [b_m,dots,b_0,0,dots,0] bold(x)
+$
+Let us discuss the case when $m=n$,we can rewrite @eqt:differential_equation_divide as:
+$
+y = [b_0 + ((b_1-b_0a_1)D^(n-1) + dots + (b_n - b_0 a_n))/(D^n +a_1 D^(n-1) + dots + a_n)] u
+$
+Also let $accent(y,tilde)^((n)) + a_1 accent(y,tilde)^((n-1)) + a_2 accent(y,tilde)^((n-2)) + dots + a_(n-1) accent(y,tilde)^((1)) + a_n accent(y,tilde) = u$
+We can get:
+$
+y = (b_n -b_0 a_n)accent(y,tilde)^((n-1)) + (b_(n-1) - b_0 a_(n-2))accent(y,tilde)^((n-2)) + dots + (b_1 - b_0 a_1)accent(y,tilde) + b_0 u
+$
+
+Thus we can write state equation in vector form in familiar way as:
+$
+bold(accent(x,dot)) = mat(delim: "[",
+0,1,dots,0;
+dots.v,dots.v,dots.down,dots.v;
+0,0,dots,1;
+-a_n,-a_(n-1),dots,-a_1
+) bold(x) + mat(delim: "[",0;0;dots.v;1)u \
+y = [b_n - b_0 a_n,b_(n-1) - b_0 a_(n-1),dots,b_1 - b_0 a_1] bold(x) + b_0 u
+$
+
+
+
 
