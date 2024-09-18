@@ -258,7 +258,95 @@ dots.v,dots.v,dots.down,dots.v;
 ) bold(x) + mat(delim: "[",0;0;dots.v;1)u \
 y = [b_n - b_0 a_n,b_(n-1) - b_0 a_(n-1),dots,b_1 - b_0 a_1] bold(x) + b_0 u
 $
-
-
-
-
+*Undetermined Canonical Form Method:*
+W.l.o.g,we assume that the equation is in the form of:
+$
+y^((n)) + a_1 y^((n-1)) + a_2 y^((n-2)) + dots + a_n y = b_0 u^((n)) + b_1 u^((n-1)) + b_2 u^((n-2)) + dots + b_n u
+$<wlog_diffeq>
+We can define state variables as:
+$
+cases(
+  x_1 &= y - beta_0 u\
+  x_2 &= accent(x,dot)_1 - beta_1 u = accent(y,dot) - beta_0 accent(u,dot) - beta_1 u\
+  x_3 &= accent(x,dot)_2 - beta_2 u = accent(y,dot.double) - beta_0 accent(u,dot.double) - beta_1 accent(u,dot) - beta_2 u\
+  &dots.v\
+  x_n &= accent(x,dot)_(n-1)-beta_(n-1)u = y^((n-1)) - beta_0 u^((n-1)) - beta_1 u^((n-2)) - dots - beta_(n-1) u
+)
+$
+Thus we have:
+$
+cases(
+  y = x_1 + beta_0 u\
+  accent(y,dot) = x_2 + beta_0 accent(u,dot) + beta_1 u\
+  accent(y,dot.double) = x_3 + beta_0 accent(u,dot.double) + beta_1 accent(u,dot) + beta_2 u\
+  #h(1em) dots.v\
+  y^((n-1)) = x_n + beta_0 u^((n-1)) + beta_1 u^((n-2)) + dots + beta_(n-1) u
+)
+$
+Let us introduce a new variables $x_(n+1) = accent(x,dot)_n - beta_n u =accent(x,dot)_(n-1)-beta_(n-1)u = y^((n)) - beta_0 u^((n)) - beta_1 u^((n-1)) - dots - beta_(n) u $.Thus we have:
+$
+y^((n)) = x_(n+1) + beta_0 u^((n)) + beta_1 u^((n-1)) + dots + beta_(n) u
+$
+Substitute $y,accent(y,dot),dots,y^((n))$ into @eqt:wlog_diffeq,we can get:
+$
+(x_(n+1) + a_1 x_n + dots + a_n x_1) + beta_0 u^((n)) + (beta_1 + a_1 beta_0)u^((n-1)) + \ (beta_2 + a_1 beta_1 + a_2 beta_0)u^((n-2)) + dots + (beta_n + a_1 beta_(n-1) + a_2 beta_(n-2) + dots + a_n beta_0)u \ = b_0 u^((n)) + b_1 u^((n-1)) + b_2 u^((n-2)) + dots + b_n u
+$
+Compare the coefficients of $u^((n)),u^((n-1)),dots,u$,we can get:
+$
+cases(
+  x_(n+1) + a_1 x_n + dots + a_n x_1 &= 0\
+  beta_0 &= b_0\
+  beta_1 + a_1 beta_0 &= b_1\
+  beta_2 + a_1 beta_1 + a_2 beta_0 &= b_2\
+  #h(7em) dots.v\
+  beta_n + a_1 beta_(n-1) + a_2 beta_(n-2) + dots + a_n beta_0 &= b_n
+)
+$
+we can rewrite it as matrix form:
+$
+vec(delim: "[",
+  b_0, b_1, b_2, dots.v, b_n) = mat(delim: "[",
+  1,0,0,dots,0;
+  a_1,1,0,dots,0;
+  a_2,a_1,1,dots,0;
+  dots.v,dots.v,dots.v,dots.down,dots.v;
+  a_n,a_(n-1),a_(n-2),dots,1
+  )
+vec(delim: "[",
+  beta_0,beta_1,beta_2,dots.v,beta_n
+  )
+$
+In summary,we can get state equation as:
+$
+cases(
+  accent(x,dot)_1 = accent(y,dot) - beta_0 accent(u,dot) = x_2 + beta_1 u \
+  accent(x,dot)_2 = accent(y,dot.double) - beta_0 accent(u,dot.double) - beta_1 accent(u,dot) = x_3 + beta_2 u\
+  #h(1.5em) dots.v\
+  accent(x,dot)_(n-1) = y^((n-1)) - beta_0 u^((n-1)) - beta_1 u^((n-2)) - dots - beta_(n-2) accent(u,dot) = x_n + beta_(n-1)u \
+  accent(x,dot)_n = y^((n)) - beta_0 u^((n)) - beta_1 u^((n-1)) - dots - beta_(n-1) accent(u,dot) = -a_n x_1 - a_(n-1) x_2 - dots - a_1 x_n + beta_n u
+)
+$
+and output equation as:
+$
+y = x_1 + beta_0 u
+$
+We can rewrite it as vector form:
+$
+vec(delim: "[",
+  accent(x,dot)_1,accent(x,dot)_2,dots.v,accent(x,dot)_n
+  ) = mat(delim: "[",
+  0,1,0,dots,0;
+  0,0,1,dots,0;
+  dots.v,dots.v,dots.v,dots.down,dots.v;
+  0,0,0,dots,1;
+  -a_n,-a_(n-1),-a_(n-2),dots,-a_1
+) vec(delim: "[",
+  x_1,x_2,dots.v,x_n
+  ) + 
+  vec(delim: "[",
+  beta_1,beta_2,dots.v,beta_n
+  )u\
+y = [1,0,0,dots,0] vec(delim: "[",
+  x_1,x_2,dots.v,x_n
+  ) + beta_0 u
+$
