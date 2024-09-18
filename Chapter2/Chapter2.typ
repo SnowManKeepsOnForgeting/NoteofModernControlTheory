@@ -88,20 +88,69 @@ $<->
   radius: 4pt
 )[
   *Laplace transfer*:
+  $
+  cal(L)[f(t)] = F(s) = integral_0^oo f(t) e^(-s t)  dd(t)
+  $<->
   
   $
-  cal(L)[a f(t) + b g(t)] = a cal(L)[f(t)] + b cal(L)[g(t)]
+  cal(L)[k f(t)] = k F(s)
   $<->
 
   $
-  cal(L)[f^(n)(t)] = s^n cal(L)[f(t)] - s^{n-1} f(0) - s^{n-2} f^{(1)}(0) - dots - f^{(n-1)}(0)
+  cal(L)[f(t) + g(t)] = F(s) + G(s)
+  $ <-> 
+
+  $
+  cal(L)[e^( -a t) f(t)] = F(s + a)
   $<->
 
   $
-  cal(L)[integral_0^t dd(t) integral_0^t dd(t) dots integral_0^t f(t) dd(t)] = 1/s^n cal(L)[f(t)]
+  cal(L)[e^(a t) f(t)] = F(s - a)
   $<->
 
-  To be continued...
+  $
+  cal(L)[f(t-T)] = e^(-s T) F(s)
+  $<->
+
+  $
+  cal(L)[f(a t)] = 1/a F(s/a)
+  $<->
+
+  $
+  cal(L)[dv(f,t)] = s F(s) - f(0)
+  $<->
+
+  $
+  cal(L)[dv(f,t,2)] = s^2 F(s) - s f(0) - f^'(0)
+  $<->
+
+  $
+  cal(L)[dv(f,t,n)] = s^n F(s) - s^(n-1) f(0) - s^(n-2) f^'(0) - dots - f^(n-1)(0)
+  $<->
+
+  $
+  cal(L)[integral_0^t f(t) dd(t)] = F(s)/s
+  $<->
+
+  $
+  f(oo) = lim_(s -> 0) s F(s)
+  $<->
+
+  $
+  f(0) = lim_(s -> oo) s F(s)
+  $<->
+  #table(
+    columns: 2, 
+    table.header[$f(t)$][$F(s)$],
+    [$1$],[$1/s$],
+    [$t$],[$1/(s^2)$],
+    [$t^n$],[$n!/(s^(n+1))$],
+    [$e^(-a t)$],[$s+a$],
+    [$sin(omega t)$],[$(omega)/(s^2 + omega^2)$],
+    [$cos(omega t)$],[$(s)/(s^2 + omega^2)$],
+    [$u(t)$],[$1/s$],
+    [$delta(t)$],[$1$]
+  )
 ]
 #set align(left)
 
@@ -153,6 +202,16 @@ $
 bold(G)(s) = bold(C)(s bold(I) - bold(A))^(-1) bold(B) + bold(D) = (bold(C) "adj"(s bold(I) - bold(A)) bold(B) + bold(D) "det"(s bold(I) - bold(A)))/(det(s bold(I) - bold(A)))
 $
 
+*Regular*
+
+We say a transfer function is regular if and only if when 
+$
+lim_(s -> oo) g(s) = c
+$where c is a constant.
+And a transfer function is strictly regular if and only if when
+$
+lim_(s -> oo) g(s) = 0
+$
 == Establishing State Space Model by Differential Equation
 
 Given a single input and single output system,if we have differential equation as:
@@ -349,4 +408,32 @@ vec(delim: "[",
 y = [1,0,0,dots,0] vec(delim: "[",
   x_1,x_2,dots.v,x_n
   ) + beta_0 u
+$
+== Establishing State Space Model by Transfer Function
+For a actual physical system,the transfer function of the system is always regular.
+
+First,let us discuss the situation where the system is restrict regular.If we have a differential equation of system as:
+$
+y^((n)) + a_(n-1)y^((n-1)) + a_(n-2)y^((n-2)) + dots + a_1 accent(y,dot) + a_0 y = b_(n-1) u^((n-1)) + dots + b_1 accent(u,dot) + b_0 u
+$
+Then we have transfer function as:
+$
+g(s) = (Y(s))/(U(s)) = (b_1 s^(n-1) + b_2 s^(n-2) + dots + b_n)/(s^n + a_1 s^(n-1)+ dots + a_(n-1)s+a_n)
+$
+We have:
+$
+Y(s) = U(s) (b_1 s^(-1) + b_2 s^(-2) + dots + b_n s^(-n))/(1 + a_1 s^(-1)+ dots + a_(n-1)s^(-(n-1))+a_n s^(-n))
+$
+Introduce a intermediate variables $Z(s) = U(s)/(1 + a_1 s^(-1)+ dots + a_(n-1)s^(-(n-1))+a_n s^(-n))$
+We can get:
+$
+Y(s) = b_1s^(-1)Z(s) + b_2s^(-2)Z(s) + dots + b_n s^(-n)Z(s)
+$
+
+Let us inverse Laplace transform of $Z(s)$,we can get:
+$
+z^((n)) + a_(n-1) z^((n-1)) + a_(n-2) z^((n-2)) + dots + a_1 accent(z,dot) + a_0 z = u\
+$
+$
+
 $
