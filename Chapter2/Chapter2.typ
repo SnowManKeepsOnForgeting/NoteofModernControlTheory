@@ -216,14 +216,15 @@ $
 
 Given a single input and single output system,if we have differential equation as:
 $
-y^((n)) + a_1 y^((n-1)) + a_2 y^((n-2)) + dots + a_n y = b_0 u + b_1 u^((1)) + b_2 u^((2)) + dots + b_m u^((m))
+y^((n)) + a_(n-1) y^((n-1)) + a_(n-2) y^((n-2)) + dots + a_0 y = b_n u^((n)) + b_(n-1) u^((n-1)) + dots + b_0 u
 $<differential_equation>
 where $m<=n$.
 
 *Condition 1: $m = 0$*
-let $b_0 = 1$,we have:
+
+We have:
 $
-y^((n)) + a_1 y^((n-1)) + a_2 y^((n-2)) + dots + a_n y = b_0 u + b_1 u^((1)) + b_2 u^((2)) + dots + b_m u^((m))
+y^((n)) + a_(n-1) y^((n-1)) + a_(n-2) y^((n-2)) + dots + a_0 y = b_0 u
 $
 We can define state variables as:
 $
@@ -242,7 +243,7 @@ cases(
   accent(x,dot)_2 = x_3,
   dots.v,
   accent(x,dot)_(n-1) = x_n,
-  accent(x,dot)_n = -a_1 x_n - a_2 x_(n-1) - dots - a_n x_1 + b_0 u
+  accent(x,dot)_n = -a_0 x_1 - a_1 x_2 - dots - a_(n-1) x_n + b_0u
 )
 $
 We can rewrite it as vector form:
@@ -251,8 +252,8 @@ bold(accent(x,dot)) = mat(delim: "[",
 0,1,dots,0;
 dots.v,dots.v,dots.down,dots.v;
 0,0,dots,1;
--a_n,-a_(n-1),dots,-a_1
-) bold(x) + mat(delim: "[",0;0;dots.v;1) \
+-a_0,-a_1,dots,-a_(n-1)
+) bold(x) + mat(delim: "[",0;0;dots.v;b_0) \
 y = mat(delim: "[",1,0,dots,0) bold(x)
   
 $
@@ -263,15 +264,21 @@ $
 
 Let us note D as $dv(,t)$,we can rewrite @eqt:differential_equation as:
 $
-y = (b_0 D^m + b_1 D^(m-1) + b_2 D^(m-2) + dots + b_m)/(D^n + a_1 D^(n-1) + a_2 D^(n-2) + dots +a_n) u
+y = (b_m D^m + b_(m-1) D^(m-1) + b_(m-2) D^(m-2) + dots + b_0)/(D^n + a_(n-1) D^(n-1) + a_(n-2) D^(n-2) + dots +a_0) u
 $<differential_equation_divide>
 Let us discuss the case when $m<n$
 
-let $accent(y,tilde)^((n)) + a_1 accent(y,tilde)^((n-1)) + a_2 accent(y,tilde)^((n-2)) + dots + a_(n-1) accent(y,tilde)^((1)) + a_n accent(y,tilde) = u$ also as $accent(y,tilde) =1/(D^n + a_1 D^(n-1) + a_2 D^(n-2) + dots +a_n) u$
+Let
+$ 
+accent(y,tilde)^((n)) + a_(n-1) accent(y,tilde)^((n-1)) + a_(n-2) accent(y,tilde)^((n-2)) + dots + a_1 accent(y,tilde)^((1)) + a_0 accent(y,tilde) = u
+$ Also as 
+$
+accent(y,tilde) =1/(D^n + a_(n-1) D^(n-1) + a_(n-2) D^(n-2) + dots +a_0) u 
+$
 
 we can get:
 $
-y = b_0 accent(y,tilde)^((m)) + b_1 accent(y,tilde)^((m-1)) + b_2 accent(y,tilde)^((m-2)) + dots + b_m accent(y,tilde)
+y = b_m accent(y,tilde)^((m)) + b_(m-1) accent(y,tilde)^((m-1)) + b_(m-2) accent(y,tilde)^((m-2)) + dots + b_0 accent(y,tilde)
 $
 We choose state variables as $x_1 = accent(y,tilde),x_2 = accent(y,tilde)^((1)) ,dots,x_n = accent(y,tilde)^((n-1)) $.We can get state equation as:
 $
@@ -280,12 +287,12 @@ cases(
   accent(x,dot)_2 = x_3,
   dots.v,
   accent(x,dot)_(n-1) = x_n,
-  accent(x,dot)_n = -a_n x_1 - a_(n-1) x_2 - dots - a_1 x_n + u
+  accent(x,dot)_n = -a_0 x_1 - a_1 x_2 - dots - a_(n-1) x_n + u
 )
 $
 and output equation as:
 $
-y = b_m x_1 + b_(m-1) x_2 + dots + b_0 x_(m+1)
+y = b_0 x_1 + b_(1) x_2 + dots + b_m x_(m+1)
 $
 We can rewrite it as vector form:
 $
@@ -293,18 +300,21 @@ bold(accent(x,dot)) = mat(delim: "[",
 0,1,dots,0;
 dots.v,dots.v,dots.down,dots.v;
 0,0,dots,1;
--a_n,-a_(n-1),dots,-a_1
+-a_0,-a_1,dots,-a_(n-1)
 ) bold(x) + mat(delim: "[",0;0;dots.v;1)u \
-y = [b_m,dots,b_0,0,dots,0] bold(x)
+y = [b_0,dots,b_m,0,dots,0] bold(x)
 $
 Let us discuss the case when $m=n$,we can rewrite @eqt:differential_equation_divide as:
 $
-y = [b_0 + ((b_1-b_0a_1)D^(n-1) + dots + (b_n - b_0 a_n))/(D^n +a_1 D^(n-1) + dots + a_n)] u
+y = [b_n + ((b_(n-1)-b_n a_(n-1))D^(n-1) + dots + (b_0 - b_n a_0))/(D^n +a_(n-1) D^(n-1) + dots + a_0)] u
 $
-Also let $accent(y,tilde)^((n)) + a_1 accent(y,tilde)^((n-1)) + a_2 accent(y,tilde)^((n-2)) + dots + a_(n-1) accent(y,tilde)^((1)) + a_n accent(y,tilde) = u$
+Also let 
+$
+accent(y,tilde)^((n)) + a_(n-1) accent(y,tilde)^((n-1)) + a_(n-2) accent(y,tilde)^((n-2)) + dots + a_1 accent(y,tilde)^((1)) + a_0 accent(y,tilde) = u
+$
 We can get:
 $
-y = (b_n -b_0 a_n)accent(y,tilde)^((n-1)) + (b_(n-1) - b_0 a_(n-2))accent(y,tilde)^((n-2)) + dots + (b_1 - b_0 a_1)accent(y,tilde) + b_0 u
+y = (b_(n-1) -b_n a_(n-1))accent(y,tilde)^((n-1)) + (b_(n-2) - b_n a_(n-2))accent(y,tilde)^((n-2)) + dots + (b_0 - b_n a_0)accent(y,tilde) + b_n u
 $
 
 Thus we can write state equation in vector form in familiar way as:
@@ -313,14 +323,14 @@ bold(accent(x,dot)) = mat(delim: "[",
 0,1,dots,0;
 dots.v,dots.v,dots.down,dots.v;
 0,0,dots,1;
--a_n,-a_(n-1),dots,-a_1
+-a_0,-a_1,dots,-a_(n-1)
 ) bold(x) + mat(delim: "[",0;0;dots.v;1)u \
-y = [b_n - b_0 a_n,b_(n-1) - b_0 a_(n-1),dots,b_1 - b_0 a_1] bold(x) + b_0 u
+y = [b_0 - b_n a_0,b_1 - b_n a_1,dots,b_(n-1) - b_n a_(n-1)] bold(x) + b_n u
 $
 *Undetermined Canonical Form Method:*
 W.l.o.g,we assume that the equation is in the form of:
 $
-y^((n)) + a_1 y^((n-1)) + a_2 y^((n-2)) + dots + a_n y = b_0 u^((n)) + b_1 u^((n-1)) + b_2 u^((n-2)) + dots + b_n u
+y^((n)) + a_(n-1) y^((n-1))  + dots + a_0 y = b_n u^((n)) + b_(n-1) u^((n-1)) + dots + b_0 u
 $<wlog_diffeq>
 We can define state variables as:
 $
@@ -418,22 +428,30 @@ y^((n)) + a_(n-1)y^((n-1)) + a_(n-2)y^((n-2)) + dots + a_1 accent(y,dot) + a_0 y
 $
 Then we have transfer function as:
 $
-g(s) = (Y(s))/(U(s)) = (b_1 s^(n-1) + b_2 s^(n-2) + dots + b_n)/(s^n + a_1 s^(n-1)+ dots + a_(n-1)s+a_n)
+g(s) = (Y(s))/(U(s)) = (b_(n-1) s^(n-1) + b_(n-2) s^(n-2) + dots + b_0)/(s^n + a_(n-1) s^(n-1)+ dots + a_1 s+a_0)
 $
+Introduce a intermediate variables $Z(s)$
 We have:
 $
-Y(s) = U(s) (b_1 s^(-1) + b_2 s^(-2) + dots + b_n s^(-n))/(1 + a_1 s^(-1)+ dots + a_(n-1)s^(-(n-1))+a_n s^(-n))
-$
-Introduce a intermediate variables $Z(s) = U(s)/(1 + a_1 s^(-1)+ dots + a_(n-1)s^(-(n-1))+a_n s^(-n))$
-We can get:
-$
-Y(s) = b_1s^(-1)Z(s) + b_2s^(-2)Z(s) + dots + b_n s^(-n)Z(s)
+g(s) = Y(s)/Z(s) Z(s)/U(s) =  1/(s^n + a_(n-1) s^(n-1)+ dots + a_(1)s+a_0)(b_(n-1) s^(n-1) + b_(n-2) s^(n-2) + dots + b_0) /1
 $
 
-Let us inverse Laplace transform of $Z(s)$,we can get:
+Let us do inverse Laplace transform of $Z(s)$,we can get:
 $
-z^((n)) + a_(n-1) z^((n-1)) + a_(n-2) z^((n-2)) + dots + a_1 accent(z,dot) + a_0 z = u\
-$
-$
+cases(
+ y = z^((n)) + a_(n-1) z^((n-1)) + a_(n-2) z^((n-2)) + dots + a_1 accent(z,dot) + a_0 z\
 
+ b_(n-1) z^((n-1)) + b_(n-2) z^((n-2)) + dots + b_1 accent(z,dot) + b_0 z = u\
+ 
+)
+$
+To be continued...
+== Linear Transformation
+Given a state variable vector $bold(x)$,the linear combination of the state variable vector is also a state variable vector $accent(bold(x),macron)$ if and only if the linear transformation matrix $bold(P)$ is invertible.
+$
+bold(x) = bold(P) accent(bold(x),macron)
+$
+In other words:
+$
+accent(bold(x),macron) = bold(P)^(-1) bold(x)
 $
