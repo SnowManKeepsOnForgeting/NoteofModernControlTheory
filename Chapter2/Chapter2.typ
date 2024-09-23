@@ -507,3 +507,108 @@ In other words:
 $
 accent(bold(x),macron) = bold(P)^(-1) bold(x)
 $
+Let us discuss what would happen if we apply liner transformation to a *liner system*.
+
+Given a linear system as:
+$
+cases(
+  bold(accent(x,dot)) &= bold(A) bold(x) + bold(B) bold(u),
+  bold(y) &= bold(C) bold(x) + bold(D) bold(u)
+)
+$
+
+Let $bold(x) = bold(P) accent(bold(x),macron)$,we have:
+$
+cases(
+  accent(accent(bold(x),macron),dot) = bold(P)^(-1) bold(A) bold(P) accent(bold(x),macron) + bold(P)^(-1) bold(B) bold(u)\
+  bold(y) = bold(C) bold(P) accent(bold(x),macron) + bold(D) bold(u)
+)
+$
+We have:
+$
+accent(bold(A),macron) = bold(P)^(-1) bold(A) bold(P)
+$
+
+$
+accent(bold(B),macron) = bold(P)^(-1) bold(B)
+$
+
+$
+accent(bold(C),macron) = bold(C) bold(P)
+$
+
+$
+accent(bold(D),macron) = bold(D)
+$
+Let us try to transform state equations to *diagonal canonical form*.
+
+Given a state equation as:
+$
+accent(bold(x),dot) = bold(A) bold(x) + bold(B) bold(u)
+$
+
+The eigenvalues of the system is defined as:
+$
+det(lambda bold(I) - bold(A)) = 0
+$
+
+*Diagonal Canonical Form*
+
+*If the geometric multiplicity of the system is equal to the order of the system*,we can transform the state equation to diagonal canonical form by linear transformation.
+
+Let $bold(P) = mat(delim: "[",bold(v_1),bold(v_2),dots,bold(v_n))^(-1)$.Then the state equation can be transformed to diagonal form as:
+$
+accent(accent(bold(x),macron),dot) = mat(delim: "[",lambda_1,0,dots,0;0,lambda_2,dots,0;dots.v,dots.v,dots.down,dots.v;0,0,dots,lambda_n) accent(bold(x),macron) + accent(bold(B),macron) bold(u)
+$
+where $accent(bold(B),macron)=bold(P)^(-1) bold(B)$.
+
+*Trick*
+
+If A is a companion matrix,then the state equation can be transformed to diagonal canonical form by transformation matrix $bold(P)$ where $bold(P)$ is a inverse vandermonde matrix.
+$
+bold(A) = mat(
+  delim: "[",0,1,0,dots,0;
+  0,0,1,dots,0;
+  dots.v,dots.v,dots.v,dots.down,dots.v;
+  0,0,0,dots,1;
+  -a_0,-a_1,-a_2,dots,-a_(n-1)
+),bold(P) = mat(delim: "[",1,1,dots,1;lambda_1,lambda_2,dots,lambda_n;lambda_1^2,lambda_2^2,dots,lambda_n^2;dots.v,dots.v,dots.down,dots.v;lambda_1^(n-1),lambda_2^(n-1),dots,lambda_n^(n-1))^(-1)
+$
+
+*Jordan Canonical Form*
+
+*If the geometric multiplicity of the system is less than the order of the system*,we can transform the state equation to jordan canonical form by linear transformation.
+
+For those eigenvalues with geometric multiplicity less than the order of the system and let $bold(v_i)$ be their corresponding eigenvectors($lambda_i bold(v_i) = bold(A) bold(v_i)$),we define generalized eigenvectors as:
+$
+cases(
+  (lambda_i bold(I) - bold(A)) bold(v_i) &= 0\
+  (lambda_i bold(I) - bold(A)) bold(v_(i)^(')) &=- bold(v_i)\
+  (lambda_i bold(I) - bold(A)) bold(v_(i)^('')) &=- bold(v_(i)^('))\
+  #h(3em) dots.v\
+  (lambda_i bold(I) - bold(A)) bold(v_(i)^(sigma_i)) &=- bold(v_(i)^(sigma_(i-1)))
+
+)
+$
+Then let $bold(P) = mat(delim: "[",bold(v_1),bold(v_1^(')),dots,bold(v_1^(sigma_1)),bold(v_2),bold(v_2^(')),dots,bold(v_2^(sigma_2)),dots)^(-1)$.Then the state equation can be transformed to jordan canonical form as:
+$
+accent(accent(bold(x),macron),dot) = mat(delim: "[",bold(J)_1,0,dots,0;0,bold(J)_2,dots,0;dots.v,dots.v,dots.down,dots.v;0,0,dots,bold(J)_n) accent(bold(x),macron) + accent(bold(B),macron) bold(u)
+$
+where $bold(J)_i$ is a jordan block corresponding to eigenvalue $lambda_i$ and $accent(bold(B),macron)=bold(P)^(-1) bold(B)$.
+
+*Modal Form*
+If the eigenvalues of the system are complex numbers,we can transform the state equation to modal form.
+
+Let
+$
+lambda_1 = sigma + omega i ,lambda_2 = sigma - omega i
+$
+In this situation,the modal form of A is 
+$
+bold(M) = mat(delim: "[",sigma,omega;-omega,sigma)
+$
+Let $bold(v_1)$ be the eigenvector of $lambda_1$ ($lambda_1 bold(v_1) = bold(A) bold(v_1)$).
+$
+bold(v_1) = bold(alpha) + bold(beta) i
+$
+The the transformation matrix $bold(P)$ is $mat(delim: "[",bold(alpha),bold(beta))^(-1)$.
