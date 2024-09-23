@@ -202,6 +202,24 @@ $
 bold(G)(s) = bold(C)(s bold(I) - bold(A))^(-1) bold(B) + bold(D) = (bold(C) "adj"(s bold(I) - bold(A)) bold(B) + bold(D) "det"(s bold(I) - bold(A)))/(det(s bold(I) - bold(A)))
 $
 
+*Closed-loop System*
+
+We have a closed-loop system as figure below:
+
+#figure(image("pic/闭环系统.png", width: 50%), caption: [Closed-loop System])
+
+We have:
+$
+bold(E)(s) = bold(u)(s) - bold(B)(s)\
+bold(B)(s) = bold(H)(s)bold(y)(s) = bold(H)(s)bold(G)(s)bold(E)(s)\
+bold(y)(s) = [bold(I) + bold(H)(s)bold(G)(s)]^(-1) bold(G)(s)bold(u)(s) 
+$<->
+
+Thus the transfer function of closed-loop system is:
+$
+bold(G)_bold(H)(s) =[bold(I) + bold(H)(s)bold(G)(s)]^(-1) bold(G)(s)
+$
+
 *Regular*
 
 We say a transfer function is regular if and only if when 
@@ -358,32 +376,18 @@ y^((n)) = x_(n+1) + beta_0 u^((n)) + beta_1 u^((n-1)) + dots + beta_(n) u
 $
 Substitute $y,accent(y,dot),dots,y^((n))$ into @eqt:wlog_diffeq,we can get:
 $
-(x_(n+1) + a_1 x_n + dots + a_n x_1) + beta_0 u^((n)) + (beta_1 + a_1 beta_0)u^((n-1)) + \ (beta_2 + a_1 beta_1 + a_2 beta_0)u^((n-2)) + dots + (beta_n + a_1 beta_(n-1) + a_2 beta_(n-2) + dots + a_n beta_0)u \ = b_0 u^((n)) + b_1 u^((n-1)) + b_2 u^((n-2)) + dots + b_n u
+(x_(n+1) + a_(n-1) x_n + dots + a_0 x_1) + beta_0 u^((n)) + (beta_1 + a_(n-1) beta_0)u^((n-1)) + \ (beta_2 + a_(n-1) beta_1 + a_(n-2) beta_0)u^((n-2)) + dots + (beta_n + a_(n-1) beta_(n-1) + a_(n-2) beta_(n-2) + dots + a_0 beta_0)u \ = b_n u^((n)) + b_(n-1) u^((n-1)) + b_(n-2) u^((n-2)) + dots + b_0 u
 $
 Compare the coefficients of $u^((n)),u^((n-1)),dots,u$,we can get:
 $
 cases(
-  x_(n+1) + a_1 x_n + dots + a_n x_1 &= 0\
-  beta_0 &= b_0\
-  beta_1 + a_1 beta_0 &= b_1\
-  beta_2 + a_1 beta_1 + a_2 beta_0 &= b_2\
+  x_(n+1) + a_(n-1) x_n + dots + a_0 x_1 &= 0\
+  beta_0 &= b_n\
+  beta_1 + a_(n-1) beta_0 &= b_(n-1)\
+  beta_2 + a_(n-1) beta_1 + a_(n-2) beta_0 &= b_(n-2)\
   #h(7em) dots.v\
-  beta_n + a_1 beta_(n-1) + a_2 beta_(n-2) + dots + a_n beta_0 &= b_n
+  beta_n + a_(n-1) beta_(n-1) + a_(n-2) beta_(n-2) + dots + a_0 beta_0 &= b_0
 )
-$
-we can rewrite it as matrix form:
-$
-vec(delim: "[",
-  b_0, b_1, b_2, dots.v, b_n) = mat(delim: "[",
-  1,0,0,dots,0;
-  a_1,1,0,dots,0;
-  a_2,a_1,1,dots,0;
-  dots.v,dots.v,dots.v,dots.down,dots.v;
-  a_n,a_(n-1),a_(n-2),dots,1
-  )
-vec(delim: "[",
-  beta_0,beta_1,beta_2,dots.v,beta_n
-  )
 $
 In summary,we can get state equation as:
 $
@@ -392,7 +396,7 @@ cases(
   accent(x,dot)_2 = accent(y,dot.double) - beta_0 accent(u,dot.double) - beta_1 accent(u,dot) = x_3 + beta_2 u\
   #h(1.5em) dots.v\
   accent(x,dot)_(n-1) = y^((n-1)) - beta_0 u^((n-1)) - beta_1 u^((n-2)) - dots - beta_(n-2) accent(u,dot) = x_n + beta_(n-1)u \
-  accent(x,dot)_n = y^((n)) - beta_0 u^((n)) - beta_1 u^((n-1)) - dots - beta_(n-1) accent(u,dot) = -a_n x_1 - a_(n-1) x_2 - dots - a_1 x_n + beta_n u
+  accent(x,dot)_n = y^((n)) - beta_0 u^((n)) - beta_1 u^((n-1)) - dots - beta_(n-1) accent(u,dot) = -a_0 x_1 - a_1 x_2 - dots - a_(n-1) x_n + beta_n u
 )
 $
 and output equation as:
@@ -408,7 +412,7 @@ vec(delim: "[",
   0,0,1,dots,0;
   dots.v,dots.v,dots.v,dots.down,dots.v;
   0,0,0,dots,1;
-  -a_n,-a_(n-1),-a_(n-2),dots,-a_1
+  -a_0,-a_1,-a_2,dots,-a_(n-1)
 ) vec(delim: "[",
   x_1,x_2,dots.v,x_n
   ) + 
@@ -422,7 +426,7 @@ $
 == Establishing State Space Model by Transfer Function
 For a actual physical system,the transfer function of the system is always regular.
 
-First,let us discuss the situation where the system is restrict regular.If we have a differential equation of system as:
+First,let us discuss the situation where the system is restrict regular in other words order of numerator of the transfer function is less than denominator of the transfer function.If we have a differential equation of system as:
 $
 y^((n)) + a_(n-1)y^((n-1)) + a_(n-2)y^((n-2)) + dots + a_1 accent(y,dot) + a_0 y = b_(n-1) u^((n-1)) + dots + b_1 accent(u,dot) + b_0 u
 $
@@ -433,19 +437,67 @@ $
 Introduce a intermediate variables $Z(s)$
 We have:
 $
-g(s) = Y(s)/Z(s) Z(s)/U(s) =  1/(s^n + a_(n-1) s^(n-1)+ dots + a_(1)s+a_0)(b_(n-1) s^(n-1) + b_(n-2) s^(n-2) + dots + b_0) /1
+g(s) = Y(s)/Z(s) Z(s)/U(s) =  (b_(n-1) s^(n-1) + b_(n-2) s^(n-2) + dots + b_0) /1 1/(s^n + a_(n-1) s^(n-1)+ dots + a_(1)s+a_0)
 $
 
 Let us do inverse Laplace transform of $Z(s)$,we can get:
 $
 cases(
- y = z^((n)) + a_(n-1) z^((n-1)) + a_(n-2) z^((n-2)) + dots + a_1 accent(z,dot) + a_0 z\
+ y = b_(n-1) z^((n-1)) + b_(n-2) z^((n-2)) + dots + b_1 accent(z,dot) + b_0 z    \
 
- b_(n-1) z^((n-1)) + b_(n-2) z^((n-2)) + dots + b_1 accent(z,dot) + b_0 z = u\
+ z^((n)) + a_(n-1) z^((n-1)) + a_(n-2) z^((n-2)) + dots + a_1 accent(z,dot) + a_0 z= u\
  
 )
 $
-To be continued...
+We can define state variables as $x_1 = z,x_2 = accent(z,dot),x_3 = accent(z,dot.double),x_n = z^((n-1))$.We have state equation as:
+$
+cases(
+  accent(x,dot)_1 = x_2,
+  accent(x,dot)_2 = x_3,
+  dots.v,
+  accent(x,dot)_(n-1) = x_n,
+  accent(x,dot)_n = -a_0 x_1 - a_1 x_2 - dots - a_(n-1) x_n + u 
+)
+$
+And output equation as:
+$
+y = b_0 x_1 + b_1 x_2 + dots + b_(n-1) x_n
+$
+
+Let us discuss when the order of numerator of transfer function is as same as order of denominator of transfer function.We have transfer function as:
+$
+g(s) = (Y(s))/(U(s)) = (b_n s^n + b_(n-1) s^(n-1) + dots + b_0)/(s^n + a_(n-1) s^(n-1)+ dots + a_1 s+a_0)\
+= b_n + ((b_(n-1) - b_n a_(n-1)) s^(n-1) + (b_(n-2) - b_n a_(n-2)) s^(n-2) + dots + (b_0 - b_n a_0))/(s^n + a_(n-1) s^(n-1)+ dots + a_1 s+a_0)
+$
+
+Let us note $h(s)$ as intermediate transfer function:
+$
+h(s) = (beta_(n-1)s^(n-1) + beta_(n-2)s^(n-2) + dots + beta_0)/(s^n + a_(n-1) s^(n-1)+ dots + a_1 s+a_0)
+$
+where $beta_i = b_i - b_n a_i$ for $i = 0,1,dots,n-1$.
+We do the same thing as before,we can get:
+$
+cases(
+ y = beta_(n-1) z^((n-1)) + beta_(n-2) z^((n-2)) + dots + beta_1 accent(z,dot) + beta_0 z    \
+
+ z^((n)) + a_(n-1) z^((n-1)) + a_(n-2) z^((n-2)) + dots + a_1 accent(z,dot) + a_0 z= u\
+ 
+)
+$
+And
+$
+cases(
+  accent(x,dot)_1 = x_2,
+  accent(x,dot)_2 = x_3,
+  dots.v,
+  accent(x,dot)_(n-1) = x_n,
+  accent(x,dot)_n = -a_0 x_1 - a_1 x_2 - dots - a_(n-1) x_n + u 
+)
+$
+For output equation,all we need is to add a $b_n u$ term.
+$
+y = beta_0 x_1 + beta_1 x_2 + dots + beta_(n-1) x_n + b_n u
+$
 == Linear Transformation
 Given a state variable vector $bold(x)$,the linear combination of the state variable vector is also a state variable vector $accent(bold(x),macron)$ if and only if the linear transformation matrix $bold(P)$ is invertible.
 $
