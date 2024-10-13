@@ -4,7 +4,7 @@
 #set heading(numbering: "1.1")
 #show math.equation: i-figured.show-equation.with(level: 2)
 #show heading: i-figured.reset-counters.with(level: 2)
-
+#set text(font: "CMU Serif")
 #counter(heading).update(1)
 = Description of State Space
 == Definition

@@ -16,7 +16,12 @@
 #set enum(indent: 1em, numbering: n => [#text(fill: black, numbering("1.", n))])
 #set list(indent: 1em, marker: n => [#text(fill: black, "•")])
 
+
 #include "Chapter2/Chapter2.typ"
 #pagebreak()
 
 #include "Chapter3/Chapter3.typ"
+#pagebreak()
+
+#include "Chapter4/Chapter4.typ"
+#pagebreak()
