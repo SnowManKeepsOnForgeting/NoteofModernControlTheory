@@ -8,6 +8,8 @@
 
 #let xbd = $accent(bold(x),dot)$
 #let xbtilde = $accent(bold(x),tilde)$
+#let Abtilde = $accent(bold(A),tilde)$
+#let Bbtilde = $accent(bold(B),tilde)$
 #counter(heading).update(3)
 
 
@@ -164,4 +166,21 @@ It is easy to prove similarly as above.
   bold(a) mat(delim: "[",bold(B),bold(A)bold(B),dots,bold(A)^(n-1)bold(B)) = bold(0)
   $
   So the matrix $bold(Q)_c$ is not full rank,which is a contradiction.
+  
+  Let us prove the sufficiency($arrow.l.double$).We prove it by contradiction.Suppose the system is not controllable.
 
+  We transform the system by controllability decomposition:
+  $
+    accent(xbtilde,dot) = Abtilde xbtilde + Bbtilde u
+  $where $Abtilde = bold(P)^(-1)bold(A)bold(P),Bbtilde = bold(P)^(-1)bold(B)$
+
+  Let us prove the sufficiency in this transformed system.The system is also not controllable.And the form of $Abtilde,Bbtilde$ is like:
+  $
+  Abtilde = mat(delim: "[",Abtilde_(11),Abtilde_(12);bold(0),Abtilde_(22)),Bbtilde = mat(delim: "[",Bbtilde_(1);bold(0))
+  $where $Abtilde_(22) != bold(0)$
+  Thus we have:
+  $
+    mat(delim:"[",lambda bold(I) - Abtilde,Bbtilde)=
+    mat(delim:"[",lambda bold(I) - Abtilde_(11),-Abtilde_(12),Bbtilde_1;bold(0),lambda bold(I) - Abtilde_(22),bold(0))
+  $
+  Because $forall lambda_i,det[lambda_i bold(I) - Abtilde] = 0$ in other words $rank(lambda_i bold(I) - Abtilde) != n$.Thus we have:$exists lambda_i$ such that $lambda_i bold(I) - Abtilde_(22)$ is not full rank.Thus $exists lambda_i,rank mat(delim: "[",lambda_i bold(I)-Abtilde,Bbtilde) != n$.So we have a contradiction.
