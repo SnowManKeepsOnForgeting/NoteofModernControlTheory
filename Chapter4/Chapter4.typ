@@ -184,3 +184,6 @@ It is easy to prove similarly as above.
     mat(delim:"[",lambda bold(I) - Abtilde_(11),-Abtilde_(12),Bbtilde_1;bold(0),lambda bold(I) - Abtilde_(22),bold(0))
   $
   Because $forall lambda_i,det[lambda_i bold(I) - Abtilde] = 0$ in other words $rank(lambda_i bold(I) - Abtilde) != n$.Thus we have:$exists lambda_i$ such that $lambda_i bold(I) - Abtilde_(22)$ is not full rank.Thus $exists lambda_i,rank mat(delim: "[",lambda_i bold(I)-Abtilde,Bbtilde) != n$.So we have a contradiction.
+
+
+
