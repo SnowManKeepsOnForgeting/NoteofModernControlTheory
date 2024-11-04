@@ -4,6 +4,7 @@
 #set heading(numbering: "1.1")
 #show math.equation: i-figured.show-equation.with(level: 2)
 #show heading: i-figured.reset-counters.with(level: 2)
+#let dcases(..args) = math.cases(..args.pos().map(math.display))
 
 #set text(font: "CMU Serif")
 #let xbd = $accent(bold(x),dot)$
